@@ -1,9 +1,4 @@
-const config = {
-    bridge: {
-        address: '',
-        key: ''
-    }
-}
+import { bridge } from './config'
 
 import React from 'react'
 import { render } from 'react-dom'
@@ -35,7 +30,7 @@ function convertColor(red, green, blue) {
 
 class Light extends React.Component {
     handleColorChange(color, event) {
-        axios.put(config.bridge.address + '/api/' + config.bridge.key + '/lights/' + this.props.id + '/state', {
+        axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
             xy: convertColor(color.rgb.r, color.rgb.g, color.rgb.b)
         })
     }
@@ -63,7 +58,7 @@ class App extends React.Component {
     }
 
     populate() {
-        axios.get(config.bridge.address + '/api/' + config.bridge.key + '/lights').then(response => {
+        axios.get(bridge.address + '/api/' + bridge.key + '/lights').then(response => {
             const json = response.data
 
             for (const key in json) {
