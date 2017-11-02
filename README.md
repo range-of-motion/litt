@@ -1,5 +1,11 @@
 # Louis Litt
 
+Web-based application for controlling Philips Hue lights powered by React.
+
+## Requirements
+
+- Node.js
+
 ## Setup
 
 1. Clone this repository (and ```cd litt``` into it)
