@@ -29,6 +29,14 @@ function convertColor(red, green, blue) {
 }
 
 class Light extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            brightness: this.props.brightness
+        }
+    }
+
     handleSwitchClick() {
         axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
             on: !this.props.on
@@ -43,6 +51,14 @@ class Light extends React.Component {
         })
     }
 
+    handleBrightnessChange(event) {
+        axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
+            bri: Number(event.target.value)
+        })
+
+        this.setState({ brightness: event.target.value })
+    }
+
     render() {
         return (
             <li>
@@ -50,6 +66,7 @@ class Light extends React.Component {
                 <button onClick={this.handleSwitchClick.bind(this)}>Switch</button>
                 <p>{this.props.on ? 'On' : 'Off' }</p>
                 <TwitterPicker onChange={this.handleColorChange.bind(this)} />
+                <input type="range" min="0" max="255" step="1" value={this.state.brightness} onChange={this.handleBrightnessChange.bind(this)} />
             </li>
         )
     }
@@ -76,7 +93,8 @@ class App extends React.Component {
                         lights: [...this.state.lights, {
                             id: key,
                             name: json[key].name,
-                            on: json[key].state.on
+                            on: json[key].state.on,
+                            brightness: json[key].state.bri
                         }]
                     })
                 }
@@ -100,7 +118,7 @@ class App extends React.Component {
 
     render() {
         const lights = this.state.lights.map(light => {
-            return <Light key={light.id} id={light.id} name={light.name} on={light.on} flipOn={this.flipOn.bind(this)} />
+            return <Light key={light.id} id={light.id} name={light.name} on={light.on} brightness={light.brightness} flipOn={this.flipOn.bind(this)} />
         })
 
         return (
