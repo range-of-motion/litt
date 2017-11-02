@@ -29,6 +29,14 @@ function convertColor(red, green, blue) {
 }
 
 class Light extends React.Component {
+    handleSwitchClick() {
+        axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
+            on: !this.props.on
+        })
+
+        this.props.flipOn(this.props.id)
+    }
+
     handleColorChange(color, event) {
         axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
             xy: convertColor(color.rgb.r, color.rgb.g, color.rgb.b)
@@ -39,6 +47,7 @@ class Light extends React.Component {
         return (
             <li>
                 <p>{this.props.name}</p>
+                <button onClick={this.handleSwitchClick.bind(this)}>Switch</button>
                 <p>{this.props.on ? 'On' : 'Off' }</p>
                 <TwitterPicker onChange={this.handleColorChange.bind(this)} />
             </li>
@@ -75,9 +84,23 @@ class App extends React.Component {
         })
     }
 
+    flipOn(id) {
+        const lights = this.state.lights
+
+        lights.forEach(light => {
+            if (light.id === id) {
+                light.on = !light.on
+            }
+        })
+
+        this.setState({
+            lights: lights
+        })
+    }
+
     render() {
         const lights = this.state.lights.map(light => {
-            return <Light key={light.id} id={light.id} name={light.name} on={light.on} />
+            return <Light key={light.id} id={light.id} name={light.name} on={light.on} flipOn={this.flipOn.bind(this)} />
         })
 
         return (
