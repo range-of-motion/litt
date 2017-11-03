@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { TwitterPicker } from 'react-color'
 
-import { toggleLight } from '../actions'
+import { toggleLight, updateLightBrightness } from '../actions'
 
 function convertColor(red, green, blue) {
     red = (red > 0.04045) ? Math.pow((red + 0.055) / (1.0 + 0.055), 2.4) : (red / 12.92)
@@ -39,6 +39,14 @@ class Light extends React.Component {
         this.props.toggleLight(this.props.id)
     }
 
+    handlePlaceholder(event) {
+        axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
+            bri: Number(event.target.value)
+        })
+
+        this.props.updateLightBrightness(this.props.id, event.target.value)
+    }
+
     render() {
         return (
             <li>
@@ -50,6 +58,7 @@ class Light extends React.Component {
                         <input type="checkbox" onChange={this.handleToggle.bind(this)} checked={this.props.on} />
                     </div>
                 </div>
+                <input type="range" value={this.props.brightness} min="0" max="255" onChange={this.handlePlaceholder.bind(this)} />
             </li>
         )
     }
@@ -59,6 +68,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         toggleLight: id => {
             dispatch(toggleLight(id))
+        },
+
+        updateLightBrightness: (id, brightness) => {
+            dispatch(updateLightBrightness(id, brightness))
         }
     }
 }

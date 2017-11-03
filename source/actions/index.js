@@ -14,3 +14,11 @@ export const toggleLight = id => {
         id
     }
 }
+
+export const updateLightBrightness = (id, brightness) => {
+    return {
+        type: 'UPDATE_LIGHT_BRIGHTNESS',
+        id,
+        brightness
+    }
+}
