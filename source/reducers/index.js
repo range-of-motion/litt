@@ -6,7 +6,7 @@ const lights = (state = [], payload) => {
             return [...state, {
                 id: payload.id,
                 name: payload.name,
-                on: payload.name,
+                on: payload.on,
                 brightness: payload.brightness
             }]
 
