@@ -42,8 +42,14 @@ class Light extends React.Component {
     render() {
         return (
             <li>
-                <p>{this.props.name}</p>
-                <input type="checkbox" onChange={this.handleToggle.bind(this)} checked={this.props.on} />
+                <div className="row">
+                    <div className="column align-middle">
+                        <p>{this.props.name}</p>
+                    </div>
+                    <div className="column align-middle align-right">
+                        <input type="checkbox" onChange={this.handleToggle.bind(this)} checked={this.props.on} />
+                    </div>
+                </div>
             </li>
         )
     }
