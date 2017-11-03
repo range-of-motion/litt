@@ -1,9 +1,11 @@
 import { bridge } from '../config'
 
 import React from 'react'
-import { render } from 'react-dom'
+import { connect } from 'react-redux'
 import axios from 'axios'
 import { TwitterPicker } from 'react-color'
+
+import { toggleLight } from '../actions'
 
 function convertColor(red, green, blue) {
     red = (red > 0.04045) ? Math.pow((red + 0.055) / (1.0 + 0.055), 2.4) : (red / 12.92)
@@ -28,46 +30,31 @@ function convertColor(red, green, blue) {
     return [Number(fx.toPrecision(4)), Number(fy.toPrecision(4))];
 }
 
-export default class Light extends React.Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            brightness: this.props.brightness
-        }
-    }
-
-    handleSwitchClick() {
+class Light extends React.Component {
+    handleToggle() {
         axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
             on: !this.props.on
         })
 
-        this.props.flipOn(this.props.id)
-    }
-
-    handleColorChange(color, event) {
-        axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
-            xy: convertColor(color.rgb.r, color.rgb.g, color.rgb.b)
-        })
-    }
-
-    handleBrightnessChange(event) {
-        axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
-            bri: Number(event.target.value)
-        })
-
-        this.setState({ brightness: event.target.value })
+        this.props.toggleLight(this.props.id)
     }
 
     render() {
         return (
             <li>
                 <p>{this.props.name}</p>
-                <button onClick={this.handleSwitchClick.bind(this)}>Switch</button>
-                <p>{this.props.on ? 'On' : 'Off' }</p>
-                <TwitterPicker onChange={this.handleColorChange.bind(this)} />
-                <input type="range" min="0" max="255" step="1" value={this.state.brightness} onChange={this.handleBrightnessChange.bind(this)} />
+                <button onClick={this.handleToggle.bind(this)}>Switch</button>
             </li>
         )
     }
 }
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        toggleLight: id => {
+            dispatch(toggleLight(id))
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Light)

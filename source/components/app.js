@@ -1,18 +1,16 @@
 import { bridge } from '../config'
 
 import React from 'react'
-import { render } from 'react-dom'
+import { connect } from 'react-redux'
 import axios from 'axios'
+
+import { addLight } from '../actions'
 
 import Light from './light'
 
-export default class App extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props)
-
-        this.state = {
-            lights: []
-        }
 
         this.populate()
     }
@@ -22,37 +20,18 @@ export default class App extends React.Component {
             const json = response.data
 
             for (const key in json) {
-                if (json[key].state.reachable) {
-                    this.setState({
-                        lights: [...this.state.lights, {
-                            id: key,
-                            name: json[key].name,
-                            on: json[key].state.on,
-                            brightness: json[key].state.bri
-                        }]
-                    })
+                const light = json[key]
+
+                if (light.state.reachable) {
+                    this.props.addLight(key, light.name, light.state.on, light.state.bri)
                 }
             }
         })
     }
 
-    flipOn(id) {
-        const lights = this.state.lights
-
-        lights.forEach(light => {
-            if (light.id === id) {
-                light.on = !light.on
-            }
-        })
-
-        this.setState({
-            lights: lights
-        })
-    }
-
     render() {
-        const lights = this.state.lights.map(light => {
-            return <Light key={light.id} id={light.id} name={light.name} on={light.on} brightness={light.brightness} flipOn={this.flipOn.bind(this)} />
+        const lights = this.props.lights.map(light => {
+            return <Light key={light.id} id={light.id} name={light.name} on={light.on} brightness={light.brightness} />
         })
 
         return (
@@ -62,3 +41,19 @@ export default class App extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        lights: state.lights
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        addLight: (id, name, on, brightness) => {
+            dispatch(addLight(id, name, on, brightness))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
