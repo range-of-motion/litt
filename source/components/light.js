@@ -52,7 +52,7 @@ class Light extends React.Component {
             <li>
                 <div className="row">
                     <div className="column align-middle">
-                        <p>{this.props.name}</p>
+                        <h1>{this.props.name}</h1>
                     </div>
                     <div className="column align-middle align-right">
                         <input type="checkbox" onChange={this.handleToggle.bind(this)} checked={this.props.on} />
