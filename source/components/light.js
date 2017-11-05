@@ -1,4 +1,4 @@
-import { bridge } from '../config'
+import { bridge, colors } from '../config'
 
 import React from 'react'
 import { connect } from 'react-redux'
@@ -55,6 +55,10 @@ class Light extends React.Component {
     }
 
     render() {
+        const colorsComponents = colors.map(color => {
+            return <Color handleColor={this.handleColor.bind(this)} red={color.red} green={color.green} blue={color.blue} />
+        })
+
         return (
             <li>
                 <div className="row">
@@ -69,13 +73,7 @@ class Light extends React.Component {
                 </div>
                 <input type="range" value={this.props.brightness} min="0" max="255" onChange={this.handlePlaceholder.bind(this)} />
                 <div className="colors">
-                    <Color handleColor={this.handleColor.bind(this)} red="255" green="105" blue="0" />
-                    <Color handleColor={this.handleColor.bind(this)} red="252" green="185" blue="0" />
-                    <Color handleColor={this.handleColor.bind(this)} red="0" green="208" blue="132" />
-                    <Color handleColor={this.handleColor.bind(this)} red="6" green="147" blue="227" />
-                    <Color handleColor={this.handleColor.bind(this)} red="235" green="20" blue="76" />
-                    <Color handleColor={this.handleColor.bind(this)} red="247" green="141" blue="167" />
-                    <Color handleColor={this.handleColor.bind(this)} red="153" green="0" blue="239" />
+                    {colorsComponents}
                 </div>
             </li>
         )
