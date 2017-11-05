@@ -55,7 +55,9 @@ class Light extends React.Component {
                         <h1>{this.props.name}</h1>
                     </div>
                     <div className="column align-middle align-right">
-                        <input type="checkbox" onChange={this.handleToggle.bind(this)} checked={this.props.on} />
+                        <button className={"toggle " + (this.props.on ? 'checked' : '' )} onClick={this.handleToggle.bind(this)}>
+                            <div className="button"></div>
+                        </button>
                     </div>
                 </div>
                 <input type="range" value={this.props.brightness} min="0" max="255" onChange={this.handlePlaceholder.bind(this)} />
