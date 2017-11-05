@@ -11,7 +11,7 @@ const lights = (state = [], payload) => {
                 brightness: payload.brightness
             }]
 
-            case 'TOGGLE_LIGHT':
+        case 'TOGGLE_LIGHT':
             return state.map(light => {
                 if (light.id === payload.id) {
                     return { ...light, on: !light.on }
