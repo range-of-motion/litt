@@ -1,7 +1,8 @@
-export const addLight = (id, name, on, brightness) => {
+export const addLight = (id, uid, name, on, brightness) => {
     return {
         type: 'ADD_LIGHT',
         id,
+        uid,
         name,
         on,
         brightness

@@ -23,7 +23,7 @@ class App extends React.Component {
                 const light = json[key]
 
                 if (light.state.reachable) {
-                    this.props.addLight(key, light.name, light.state.on, light.state.bri)
+                    this.props.addLight(key, light.uniqueid, light.name, light.state.on, light.state.bri)
                 }
             }
         })
@@ -50,8 +50,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        addLight: (id, name, on, brightness) => {
-            dispatch(addLight(id, name, on, brightness))
+        addLight: (id, uid, name, on, brightness) => {
+            dispatch(addLight(id, uid, name, on, brightness))
         }
     }
 }

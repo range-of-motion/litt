@@ -5,6 +5,7 @@ const lights = (state = [], payload) => {
         case 'ADD_LIGHT':
             return [...state, {
                 id: payload.id,
+                uid: payload.uid,
                 name: payload.name,
                 on: payload.on,
                 brightness: payload.brightness
