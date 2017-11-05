@@ -2,6 +2,8 @@
 
 Web-based application for controlling Philips Hue lights powered by React.
 
+![](screenshot.png)
+
 ## Requirements
 
 - Node.js
