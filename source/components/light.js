@@ -3,7 +3,6 @@ import { bridge } from '../config'
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { TwitterPicker } from 'react-color'
 
 import { toggleLight, updateLightBrightness } from '../actions'
 
