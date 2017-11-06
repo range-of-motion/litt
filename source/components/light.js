@@ -4,7 +4,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
-import { toggleLight, updateLightBrightness } from '../actions'
+import { toggleLight, updateLightBrightness, updateName } from '../actions'
 
 import Color from './color'
 
@@ -88,6 +88,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         updateLightBrightness: (id, brightness) => {
             dispatch(updateLightBrightness(id, brightness))
+        },
+
+        updateName: (id, name) => {
+            dispatch(updateName(id, name))
         }
     }
 }
