@@ -4,7 +4,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
-import { toggleLight, updateLightBrightness } from '../actions'
+import { toggleLight, updateLightBrightness, updateName } from '../actions'
 
 import Color from './color'
 
@@ -32,6 +32,37 @@ function convertColor(red, green, blue) {
 }
 
 class Light extends React.Component {
+
+    constructor(props) {
+        super(props)
+
+        this.state = { editing: false }
+    }
+
+    toggleEditing() {
+        this.setState({ editing: !this.editing })
+    }
+
+    handleEditField(event) {
+
+        if ( event.keyCode === 13 ) {
+            this.setState({ editing: !this.state.editing })
+
+            let target = event.target
+
+            axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id, {
+                name: target.value
+            })
+
+            this.props.updateName(this.props.id, target.value)
+        }
+        else if (event.keyCode === 27) {
+
+            this.setState({ editing: !this.state.editing })
+        }
+
+    }
+
     handleToggle() {
         axios.put(bridge.address + '/api/' + bridge.key + '/lights/' + this.props.id + '/state', {
             on: !this.props.on
@@ -63,7 +94,11 @@ class Light extends React.Component {
             <li>
                 <div className="row">
                     <div className="column align-middle">
-                        <h1>{this.props.name}</h1>
+                        {this.state.editing ? (
+                            <input type="text" defaultValue={this.props.name} onKeyDown={ this.handleEditField.bind(this) } autoFocus />
+                        ) : (
+                            <h1 onClick={ this.toggleEditing.bind(this) }>{this.props.name}</h1>
+                        )}
                     </div>
                     <div className="column align-middle align-right">
                         <button className={"toggle " + (this.props.on ? 'checked' : '' )} onClick={this.handleToggle.bind(this)}>
@@ -88,6 +123,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         updateLightBrightness: (id, brightness) => {
             dispatch(updateLightBrightness(id, brightness))
+        },
+
+        updateName: (id, name) => {
+            dispatch(updateName(id, name))
         }
     }
 }

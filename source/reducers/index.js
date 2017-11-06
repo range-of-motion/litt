@@ -29,6 +29,15 @@ const lights = (state = [], payload) => {
                 return light
             })
 
+        case 'UPDATE_NAME':
+            return state.map(light => {
+                if (light.id === payload.id) {
+                    return { ...light, name: payload.name }
+                }
+
+                return light
+            })
+
         default:
             return state
     }
